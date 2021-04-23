@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { setUpdate, initalGlobalState, GlobalContext } from './app/GlobalState';
+import { HomeScreen } from './app/screens/home/screen';
 
 export default class App extends React.Component {
 
@@ -24,7 +25,7 @@ export default class App extends React.Component {
           <GlobalContext.Consumer>
             {({state, update}) => {
               return <View style={styles.container}>
-                <Text>{state.timetableData.info.headerText}</Text>
+                <HomeScreen />
                 <StatusBar style="auto" />
               </View>
             }}
