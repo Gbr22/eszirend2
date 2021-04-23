@@ -1,5 +1,6 @@
 import React from "react";
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import seedrandom from "seedrandom";
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
 
@@ -95,11 +96,9 @@ export function HomeScreen(){
                                             <View
                                                 style={{
                                                     borderRadius: 49,
-                                                    backgroundColor: _class.color+"33",
+                                                    backgroundColor: `hsl(${Math.floor(seedrandom(_class.id)()*360)}, 100%, 88%)`,
                                                     width: 49,
                                                     height: 49,
-                                                    
-                                                    
                                                 }}
                                             >
                                                 
@@ -110,6 +109,7 @@ export function HomeScreen(){
                                                 fontSize: 18.38,
                                                 color: "#000000A6",
                                                 fontWeight: "bold",
+                                                zIndex: 1,
                                             }}
                                             numberOfLines={1}
                                         >{ _class.shortName || _class.name }</Text>
