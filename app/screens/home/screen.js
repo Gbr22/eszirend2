@@ -1,10 +1,12 @@
+import { useLinkTo } from "@react-navigation/native";
 import React from "react";
 import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import seedrandom from "seedrandom";
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
 
-export function HomeScreen(){
+export function HomeScreen({ navigation }){
+    const linkTo = useLinkTo();
     return (
         <GlobalContext.Consumer>
             {({state, update}) => {
@@ -72,6 +74,9 @@ export function HomeScreen(){
                                     style={{
                                         width: "100%",
                                         height: "100%",
+                                    }}
+                                    onPress={()=>{
+                                        linkTo("/timetable/class/"+(_class.id))
                                     }}
                                 >
                                     <View
