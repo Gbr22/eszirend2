@@ -1,14 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import fs from 'fs';
 import { getData } from '../logic/data.mjs';
-import proxy from 'express-http-proxy';
 
 const app = express();
 const port = 3001;
-let devPort = process.env["DEV_PORT"] || 19006;
 
 let args = process.argv.slice(2);
 let isDev = args.includes("--dev");
+
+app.use(cors());
 
 app.use("/api/data",async (req,res)=>{
     function fetchAndSend(){
@@ -33,15 +34,6 @@ app.use("/api/data",async (req,res)=>{
         }
     }
 });
-if (isDev){
-    app.use(proxy('localhost:'+devPort));
-} else {
-    app.use("/timetable/*",(req,res)=>{
-        res.sendFile("index.html",{root:'../dist/'});
-    })
-    app.use(express.static("../dist/"));
-}
-
 
 
 app.listen(port, () => {
