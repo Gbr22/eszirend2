@@ -7,22 +7,20 @@ import { styles } from "../../styles";
 import Day from "./day";
 import Entry from "./entry";
 import { Pager } from "../../components/Pager/PagerUniversal";
+import { DayBar } from './dayBar';
+
 
 export function ViewerScreen(props){
     const linkTo = useLinkTo();
     return <ViewerScreenClass {...props} linkTo={linkTo} />
 }
 export class ViewerScreenClass extends React.PureComponent {
-    state={
-        currentDayIndex:0,
-    }
     PagerRef = React.createRef();
+    DayBarRef = React.createRef();
     render(){
         let { navigation, route, linkTo } = this.props;
         
         let { type, id } = route.params;
-
-        let { currentDayIndex } = this.state;
         
         let itemSpacing = styles.viewer.entry.spacing;
         let rowHeight = styles.viewer.row.height;
@@ -130,9 +128,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                         initialPage={0}
                                         onPageSelected={(e)=>{
                                             let pos = e.nativeEvent.position;
-                                            this.setState({
-                                                currentDayIndex:pos,
-                                            })
+                                            this.DayBarRef.current?.setIndex(pos);
                                         }}
                                         style={{
                                             flex: 1,
@@ -158,69 +154,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                 </View>
                                 
                             </ScrollView>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    height: dayBarHeight,
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    position: Platform.select({web:"fixed",default: "absolute"}),
-                                    bottom: 0,
-                                    width: "100%",
-                                    backgroundColor: "#fff",
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 2,
-                                    },
-                                    shadowOpacity: 0.30,
-                                    shadowRadius: 4.65,
-                                    elevation: 8
-                                }}
-                            >
-                                {
-                                    filteredDays.map(day=>{
-                                        let active = day.val == currentDayIndex;
-                                        return (
-                                            <View key={day.id}
-                                                style={{
-                                                    marginHorizontal: 31.16/2,
-                                                    width: 35.33,
-                                                    height: 35.33,
-                                                }}
-                                            >
-                                                <TouchableWithoutFeedback
-                                                    onPress={()=>{
-                                                        this.PagerRef.current.setPageWithoutAnimation(day.val);
-                                                        /* this.setState({
-                                                            currentDayIndex: day.val,
-                                                        }) */
-                                                    }}
-                                                >
-                                                    <View
-                                                        style={{
-                                                            width: 30.33,
-                                                            height: 30.33,
-                                                            borderRadius: 30.33,
-                                                            backgroundColor: active ? "#0074D921" : "transparent",
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                        }}
-                                                    >
-                                                        <Text
-                                                            style={{
-                                                                fontSize: 15.16,
-                                                                fontWeight: "bold",
-                                                                color: active ? "#0074D9" : "#3C3C3C"
-                                                            }}
-                                                        >{day.shortName}</Text>
-                                                    </View>
-                                                </TouchableWithoutFeedback>
-                                            </View>
-                                        )
-                                    })
-                                }
-                            </View>
+                            <DayBar PagerRef={this.PagerRef} ref={this.DayBarRef} />
                         </View>
                         )
                     }}
