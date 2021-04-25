@@ -1,7 +1,15 @@
 
 
 export let styles = {
-    viewerEntry: {
-        spacing: 7,
+    viewer: {
+        entry:{
+            spacing: 7,
+        },
+        row: {
+            height: 67,
+        },
+        dayBar:{
+            height: 50,
+        }
     }
 }

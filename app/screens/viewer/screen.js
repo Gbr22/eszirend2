@@ -4,6 +4,7 @@ import { Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View }
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
 import { styles } from "../../styles";
+import Day from "./day";
 import Entry from "./entry";
 
 
@@ -23,31 +24,9 @@ export class ViewerScreenClass extends React.PureComponent {
 
         let { currentDayIndex } = this.state;
         
-        let itemSpacing = styles.viewerEntry.spacing;
-        let rowHeight = 67;
-        let dayBarHeight = 50;
-
-        function getEntries(allentries,day,period, classId){
-                
-            let entries = allentries.filter(
-                e=>e.lesson.classIds.includes(classId) &&
-                day.matches(e.days) &&
-                e.periods.includes(period.period)
-            );
-            entries.sort((a,b)=>{
-                a = a.lesson.groups[0].id;
-                b = b.lesson.groups[0].id;
-                if (a < b) {
-                    return -1;
-                }
-                if (a > b) {
-                    return 1;
-                }
-                return 0;
-            });
-
-            return entries;
-        }
+        let itemSpacing = styles.viewer.entry.spacing;
+        let rowHeight = styles.viewer.row.height;
+        let dayBarHeight = styles.viewer.dayBar.height;
 
         return (
             <View
@@ -62,7 +41,6 @@ export class ViewerScreenClass extends React.PureComponent {
                 >
                     {({state, update}) => {
                         let _class = state.timetableData.classes.find(e=>e.id == id);
-                        let currentDay = state.timetableData.days.find(e=>e.val == currentDayIndex);
                         return (
                         <View
                             style={{
@@ -146,33 +124,8 @@ export class ViewerScreenClass extends React.PureComponent {
                                                 </View>
                                             )
                                         }) }
-                                        
                                     </View>
-                                    <View
-                                        style={{
-                                            flex:1,
-                                        }}
-                                    >
-                                    { state.timetableData.periods.map((period,i)=>{
-                                        let entries = getEntries(state.timetableData.entries,currentDay,period,id);
-
-                                        return (
-                                            <View
-                                                key={period.id}
-                                                style={{
-                                                    marginBottom: itemSpacing,
-                                                    marginRight: itemSpacing,
-                                                    height: rowHeight,
-                                                    flexDirection: "row",
-                                                }}
-                                            >
-                                                { entries.map((entry,i)=>{
-                                                    return <Entry key={`${entry.id}-${period.id}`} entry={entry} period={period} index={i} />;
-                                                }) }
-                                            </View>
-                                        )
-                                    }) }
-                                    </View>
+                                    <Day index={currentDayIndex} id={id} />
                                 </View>
                                 
                             </ScrollView>

@@ -51,7 +51,7 @@ export default function Entry({entry, period, index}){
         <View
             style={{
                 flex: 1,
-                marginLeft: index == 0 ? 0: styles.viewerEntry.spacing,
+                marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
                 backgroundColor: getColorForEntry(entry) || "#EDEDED",
                 borderRadius: 8.66,
                 overflow: "hidden",
