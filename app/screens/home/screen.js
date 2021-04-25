@@ -1,6 +1,6 @@
 import { useLinkTo } from "@react-navigation/native";
 import React from "react";
-import { ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import seedrandom from "seedrandom";
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
@@ -15,7 +15,6 @@ export function HomeScreen({ navigation }){
                     width:"100%",
                     height:"100%",
                     paddingTop: StatusBar.currentHeight,
-                    paddingBottom: 20.66,
                     boxSizing: "border-box",
                 }}
               >
@@ -125,6 +124,12 @@ export function HomeScreen({ navigation }){
                         );
                     }) }
                 </View>
+                <View
+                    style={{
+                        height: Platform.select({web: 0, default: 20.66}),
+                        width: "100%",
+                    }}
+                ></View>
               </ScrollView>
             }}
           </GlobalContext.Consumer>
