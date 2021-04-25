@@ -6,7 +6,7 @@ import { GlobalContext } from "../../GlobalState";
 import { styles } from "../../styles";
 import Day from "./day";
 import Entry from "./entry";
-
+import { Pager } from "../../components/Pager/PagerUniversal";
 
 export function ViewerScreen(props){
     const linkTo = useLinkTo();
@@ -16,7 +16,7 @@ export class ViewerScreenClass extends React.PureComponent {
     state={
         currentDayIndex:0,
     }
-
+    PagerRef = React.createRef();
     render(){
         let { navigation, route, linkTo } = this.props;
         
@@ -41,6 +41,7 @@ export class ViewerScreenClass extends React.PureComponent {
                 >
                     {({state, update}) => {
                         let _class = state.timetableData.classes.find(e=>e.id == id);
+                        let filteredDays = state.timetableData.days.filter(e=>e.val != null)
                         return (
                         <View
                             style={{
@@ -125,7 +126,35 @@ export class ViewerScreenClass extends React.PureComponent {
                                             )
                                         }) }
                                     </View>
-                                    <Day index={currentDayIndex} id={id} />
+                                    <Pager
+                                        initialPage={0}
+                                        onPageSelected={(e)=>{
+                                            let pos = e.nativeEvent.position;
+                                            this.setState({
+                                                currentDayIndex:pos,
+                                            })
+                                        }}
+                                        style={{
+                                            flex: 1,
+                                            width: "100%",
+                                            height: "100%"
+                                        }}
+                                        ref={this.PagerRef}
+                                    >
+                                        { filteredDays.map(day=>{
+                                            return (
+                                                <View
+                                                    key={day.val}
+                                                    style={{
+                                                        flex:1,
+                                                        width: "100%",
+                                                    }}
+                                                >
+                                                    <Day index={day.val} id={id} />
+                                                </View>
+                                            )
+                                        }) }
+                                    </Pager>
                                 </View>
                                 
                             </ScrollView>
@@ -150,7 +179,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                 }}
                             >
                                 {
-                                    state.timetableData.days.filter(e=>e.val != null).map(day=>{
+                                    filteredDays.map(day=>{
                                         let active = day.val == currentDayIndex;
                                         return (
                                             <View key={day.id}
@@ -162,9 +191,10 @@ export class ViewerScreenClass extends React.PureComponent {
                                             >
                                                 <TouchableWithoutFeedback
                                                     onPress={()=>{
-                                                        this.setState({
+                                                        this.PagerRef.current.setPageWithoutAnimation(day.val);
+                                                        /* this.setState({
                                                             currentDayIndex: day.val,
-                                                        })
+                                                        }) */
                                                     }}
                                                 >
                                                     <View
