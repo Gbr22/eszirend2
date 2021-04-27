@@ -26,6 +26,7 @@ export class Pager extends React.PureComponent {
         }
         window.addEventListener("resize",this.onresize);
         this.onresize();
+        this.setPageWithoutAnimation(this.props.initialPage || 0);
     }
     componentWillUnmount(){
         window.removeEventListener("resize",this.onresize);

@@ -26,6 +26,8 @@ export class ViewerScreenClass extends React.PureComponent {
         let rowHeight = styles.viewer.row.height;
         let dayBarHeight = styles.viewer.dayBar.height;
 
+        let initalDay = 0;
+
         return (
             <View
                 style={{
@@ -125,7 +127,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                         }) }
                                     </View>
                                     <Pager
-                                        initialPage={0}
+                                        initialPage={initalDay}
                                         onPageSelected={(e)=>{
                                             let pos = e.nativeEvent.position;
                                             this.DayBarRef.current?.setIndex(pos);
@@ -146,7 +148,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                                         width: "100%",
                                                     }}
                                                 >
-                                                    <Day index={day.val} id={id} />
+                                                    <Day index={day.val} id={id} initalDay={initalDay} />
                                                 </View>
                                             )
                                         }) }
