@@ -65,14 +65,35 @@ export default class Day extends React.PureComponent {
             >
                 {({state, update}) => {
                     let day = state.timetableData.days.find(e=>e.val == currentDayIndex);
-                    return <Fragment>
-                        { state.timetableData.periods.map((period,i)=>{
-                            let entries = getEntries(state.timetableData.entries,day,period,id);
+                    
+                    let rows = state.timetableData.periods.map((period,i)=>{
+                        let entries = getEntries(state.timetableData.entries,day,period,id);
+                        return {
+                            period,
+                            entries,
+                            emptyBefore:0,
+                        };
+                    });
+                    let emptyRows = 0;
+                    rows.forEach(row=>{
+                        if (row.entries.length == 0){
+                            emptyRows++;
+                        } else {
+                            row.emptyBefore = emptyRows;
+                            emptyRows = 0;
+                        }
+                    })
 
+                    return <Fragment>
+                        { rows.map(({period,entries, emptyBefore})=>{
+                            if (entries.length == 0){
+                                return null;
+                            }
                             return (
                                 <View
                                     key={period.id}
                                     style={{
+                                        marginTop: emptyBefore * (rowHeight + itemSpacing),
                                         marginBottom: itemSpacing,
                                         marginRight: itemSpacing,
                                         height: rowHeight,
