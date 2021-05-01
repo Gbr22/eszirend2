@@ -1,7 +1,8 @@
 import React from "react"
 import { Text, View } from "react-native"
 import { TouchableFallback } from "../../components/TouchableFallback"
-import { styles } from "../../styles"
+import { styles } from "../../styles";
+import seedrandom from "seedrandom";
 
 export default function Entry({entry, period, index}){
     let textStyle = {
@@ -11,14 +12,22 @@ export default function Entry({entry, period, index}){
 
     function getColorForEntry(entry){
         let map = {
-            "Csoport1":"#1a8cff",
-            "Csoport2":"#ff6666",
-            "Környezetvédelem":"#51FFB9",
-            "Informatika":"#5ABDFF",
+            "Csoport1":"hsl(210, 100%, 66%)",
+            "Csoport2":"hsl(0, 100%, 66%)",
+            "Környezetvédelem":"hsl(156, 100%, 66%)",
+            "Informatika":"hsl(204, 100%, 66%)",
             "Közgazdaság":"#F7AD94",
             "Ügyvitel":"#a1e3a1",
             "Pénzügy":"#7FDBFF",
-            "Mechatronika":"#94b8b8",
+            "Mechatronika":"hsl(180, 20%, 66%)",
+        }
+        let aliases = {
+            "Csoport-1":"Csoport1",
+            "Csoport-2":"Csoport2",
+            "Csoprot-2":"Csoport2",
+        };
+        for(let key in aliases){
+            map[key] = map[aliases[key]];
         }
         let groupName = entry.lesson.groups[0].name;
 
@@ -27,7 +36,8 @@ export default function Entry({entry, period, index}){
         } else if (map[groupName]) {
             return map[groupName];
         } else {
-            return entry.lesson.groups[0].color;
+            return `hsl(${Math.floor(seedrandom(entry.lesson.groups[0].id)()*300)}, 100%, 75%)`;
+            /* return entry.lesson.groups[0].color; */
         }
         
     }
