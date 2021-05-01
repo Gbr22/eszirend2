@@ -56,9 +56,11 @@ export default function Entry({entry, period, index, width, height}){
         }
         return name;
     }
-    if (entry == null){
+    
+    if (entry == null || period?.id != entry?.period){
         return (
         <View
+            pointerEvents="none"
             style={{
                 flex: 1*width,
                 marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
@@ -68,16 +70,30 @@ export default function Entry({entry, period, index, width, height}){
         </View>
         );
     }
+    if (period.id == entry.period){
+        height = entry.periods.length;
+    }
+    
     return (
         <View
             style={{
                 flex: 1*width,
                 marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
-                backgroundColor: getColorForEntry(entry) || "#EDEDED",
-                borderRadius: 8.66,
-                overflow: "hidden",
+                
+                overflow: "visible",
+                position: "relative",
+                height: styles.viewer.row.height,
             }}
         >
+            <View
+                style={{
+                    width: "100%",
+                    height: (styles.viewer.row.height) * height + styles.viewer.entry.spacing * (height-1),
+                    borderRadius: 8.66,
+                    position: "absolute",
+                    overflow: "hidden",
+                }}
+            >
             <TouchableFallback
                 style={{
                     width: "100%",
@@ -85,48 +101,57 @@ export default function Entry({entry, period, index, width, height}){
                 }}
                 onPress={()=>{
                     if(Platform.OS == "web"){
-                        console.log(entry,width,height);
+                        console.log(entry,width,height,period);
                     }
                 }}
             >
                 <View
                     style={{
+                        backgroundColor: getColorForEntry(entry) || "#EDEDED",
                         width: "100%",
                         height: "100%",
-                        justifyContent: "space-between",
-                        padding: 7,
                     }}
                 >
                     <View
                         style={{
-                            flexDirection: "row",
-                            alignItems: "center",
+                            width: "100%",
+                            height: "100%",
                             justifyContent: "space-between",
-                            height: 16.33,
+                            padding: 7,
                         }}
                     >
-                        <Text style={textStyle} numberOfLines={1}>{ entry.classrooms.map(e=>e.shortName).join(", ") }</Text>
-                        { entry.lesson.groups[0].entireClass == false && <Text style={textStyle} numberOfLines={1}>{ [...new Set(entry.lesson.groups.map(e=>shortenGroupName(e.name)))].join(", ") }</Text> }
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                height: 16.33,
+                            }}
+                        >
+                            <Text style={textStyle} numberOfLines={1}>{ entry.classrooms.map(e=>e.shortName).join(", ") }</Text>
+                            { entry.lesson.groups[0].entireClass == false && <Text style={textStyle} numberOfLines={1}>{ [...new Set(entry.lesson.groups.map(e=>shortenGroupName(e.name)))].join(", ") }</Text> }
+                        </View>
+                        <View
+                            style={{
+                                alignItems: "center",
+                                height: 16.33,
+                            }}
+                        ><Text styles={[textStyle]}
+                            numberOfLines={1}
+                        >{ entry.lesson.subject.name }</Text></View>
+                        <View
+                            style={{
+                                alignItems: "flex-end",
+                                height: 16.33,
+                            }}
+                        ><Text style={textStyle}
+                            numberOfLines={1}
+                        >{ entry.lesson.teachers.map(e=>e.name).join(", ") }</Text></View>
+                        
                     </View>
-                    <View
-                        style={{
-                            alignItems: "center",
-                            height: 16.33,
-                        }}
-                    ><Text styles={[textStyle]}
-                        numberOfLines={1}
-                    >{ entry.lesson.subject.name }</Text></View>
-                    <View
-                        style={{
-                            alignItems: "flex-end",
-                            height: 16.33,
-                        }}
-                    ><Text style={textStyle}
-                        numberOfLines={1}
-                    >{ entry.lesson.teachers.map(e=>e.name).join(", ") }</Text></View>
-                    
                 </View>
             </TouchableFallback>
+            </View>
         </View>
     )
 }

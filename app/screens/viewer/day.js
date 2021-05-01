@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 import { GlobalContext } from "../../GlobalState";
 import { styles } from "../../styles";
 import Entry from "./entry";
@@ -97,7 +97,7 @@ export default class Day extends React.PureComponent {
                     })
 
                     return <Fragment>
-                        { rows.map(({period,entries, emptyBefore})=>{
+                        { rows.map(({period,entries, emptyBefore}, index)=>{
                             if (entries.length == 0){
                                 return null;
                             }
@@ -110,6 +110,7 @@ export default class Day extends React.PureComponent {
                                         marginRight: itemSpacing,
                                         height: rowHeight,
                                         flexDirection: "row",
+                                        zIndex: Platform.select({web:100-index, default: undefined}),
                                     }}
                                 >
                                     { entries.map(({entry,width,height},i)=>{
