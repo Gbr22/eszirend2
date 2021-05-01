@@ -47,7 +47,10 @@ export class Pager extends React.PureComponent {
                     }}
                     scrollEventThrottle={0}
                     onScroll={()=>{
-                        let el = this.scrollViewRef.current.getScrollableNode();
+                        let el = this.scrollViewRef?.current?.getScrollableNode();
+                        if (!el){
+                            return;
+                        }
                         let page = Math.round(el.scrollLeft/el.offsetWidth);
                         if (page != this.scrollPage){
                             this.scrollPage = page;

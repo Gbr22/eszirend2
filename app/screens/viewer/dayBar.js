@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Platform, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Platform, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
 import { GlobalContext } from "../../GlobalState";
 import { styles } from "../../styles";
 
@@ -52,7 +52,7 @@ export class DayBar extends React.PureComponent {
                                         height: 35.33,
                                     }}
                                 >
-                                    <TouchableWithoutFeedback
+                                    <Pressable
                                         onPress={()=>{
                                             PagerRef.current.setPageWithoutAnimation(day.val);
                                             /* this.setState({
@@ -78,7 +78,7 @@ export class DayBar extends React.PureComponent {
                                                 }}
                                             >{day.shortName}</Text>
                                         </View>
-                                    </TouchableWithoutFeedback>
+                                    </Pressable>
                                 </View>
                             )
                         })
