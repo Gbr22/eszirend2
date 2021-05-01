@@ -4,57 +4,14 @@ import { TouchableFallback } from "../../components/TouchableFallback"
 import { styles } from "../../styles";
 import seedrandom from "seedrandom";
 
-export default function Entry({entry, period, index, width, height}){
+export default function Entry({entry, period, index, width, height, ModalRef}){
     let textStyle = {
         fontSize: 14,
         color: "#000000",
     }
 
     function getColorForEntry(entry){
-        let map = {
-            "Csoport1":"hsl(210, 100%, 66%)",
-            "Csoport2":"hsl(0, 100%, 66%)",
-            "Környezetvédelem":"hsl(156, 100%, 66%)",
-            "Informatika":"hsl(204, 100%, 66%)",
-            "Közgazdaság":"#F7AD94",
-            "Ügyvitel":"#a1e3a1",
-            "Pénzügy":"#7FDBFF",
-            "Mechatronika":"hsl(180, 20%, 66%)",
-        }
-        let aliases = {
-            "Csoport-1":"Csoport1",
-            "Csoport-2":"Csoport2",
-            "Csoprot-2":"Csoport2",
-        };
-        for(let key in aliases){
-            map[key] = map[aliases[key]];
-        }
-        let groupName = entry.lesson.groups[0].name;
-
-        if (entry.lesson.groups[0].entireClass){
-            return null;
-        } else if (map[groupName]) {
-            return map[groupName];
-        } else {
-            return `hsl(${Math.floor(seedrandom(entry.lesson.groups[0].id)()*300)}, 100%, 75%)`;
-            /* return entry.lesson.groups[0].color; */
-        }
-        
-    }
-    function shortenGroupName(name){
-        let obj = {
-            "Angol":"Ang",
-            "Német":"Ném",
-            "Környezetvédelem":"♻️",
-            "Informatika":"🖱️",
-            "Mechatronika":"🛠️",
-            "Ügyvitel":"Ügyv",
-            "Közgazdaság":"Közg",
-        };
-        for (let p in obj){
-            name = name.replace(p,obj[p]);
-        }
-        return name;
+        return entry.getCustomColor(seedrandom);
     }
     
     if (entry == null || period?.id != entry?.period){
@@ -103,6 +60,7 @@ export default function Entry({entry, period, index, width, height}){
                     if(Platform.OS == "web"){
                         console.log(entry,width,height,period);
                     }
+                    ModalRef.current.open({entry,period});
                 }}
             >
                 <View
@@ -129,7 +87,7 @@ export default function Entry({entry, period, index, width, height}){
                             }}
                         >
                             <Text style={textStyle} numberOfLines={1}>{ entry.classrooms.map(e=>e.shortName).join(", ") }</Text>
-                            { entry.lesson.groups[0].entireClass == false && <Text style={textStyle} numberOfLines={1}>{ [...new Set(entry.lesson.groups.map(e=>shortenGroupName(e.name)))].join(", ") }</Text> }
+                            { entry.lesson.groups[0].entireClass == false && <Text style={textStyle} numberOfLines={1}>{ entry.lesson.formatGroups({shorten:true}) }</Text> }
                         </View>
                         <View
                             style={{

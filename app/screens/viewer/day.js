@@ -114,7 +114,7 @@ export default class Day extends React.PureComponent {
                                     }}
                                 >
                                     { entries.map(({entry,width,height},i)=>{
-                                        return <Entry key={`${entry?.id}-${period?.id}-${i}`} entry={entry} width={width} height={height} period={period} index={i} />;
+                                        return <Entry key={`${entry?.id}-${period?.id}-${i}`} entry={entry} width={width} height={height} period={period} index={i} ModalRef={this.props.ModalRef} />;
                                     }) }
                                 </View>
                             )

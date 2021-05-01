@@ -18,7 +18,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-pager-view": "5.1.5",
-    "react-native-web": "~0.13.12",
+    "react-native-web": "^0.14.0",
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {

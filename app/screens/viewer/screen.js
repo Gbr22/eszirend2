@@ -1,6 +1,6 @@
 import { useLinkTo } from "@react-navigation/native";
 import React from "react"
-import { Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Modal, Platform, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from "react-native";
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
 import { styles } from "../../styles";
@@ -8,6 +8,7 @@ import Day from "./day";
 import Entry from "./entry";
 import { Pager } from "../../components/Pager/PagerUniversal";
 import { DayBar } from './dayBar';
+import { EntryModal } from "./EntryModal";
 
 
 export function ViewerScreen(props){
@@ -17,6 +18,7 @@ export function ViewerScreen(props){
 export class ViewerScreenClass extends React.PureComponent {
     PagerRef = React.createRef();
     DayBarRef = React.createRef();
+    ModalRef = React.createRef();
     render(){
         let { navigation, route, linkTo } = this.props;
         
@@ -34,6 +36,7 @@ export class ViewerScreenClass extends React.PureComponent {
                     flex: 1,
                 }}
             >
+                <EntryModal ref={this.ModalRef} />
                 <GlobalContext.Consumer
                     style={{
                         flex: 1,
@@ -148,7 +151,7 @@ export class ViewerScreenClass extends React.PureComponent {
                                                         width: "100%",
                                                     }}
                                                 >
-                                                    <Day index={day.val} id={id} initalDay={initalDay} />
+                                                    <Day index={day.val} id={id} initalDay={initalDay} ModalRef={this.ModalRef} />
                                                 </View>
                                             )
                                         }) }
