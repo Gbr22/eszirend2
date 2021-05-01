@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import { DataRoot } from "../logic/objects.js";
 import { getData } from "./data";
 
@@ -16,9 +17,13 @@ export function UpdateGlobalState(){
 }
 
 getData().then(json=>{
+    let data = new DataRoot(json);
     UpdateGlobalState({
-        timetableData: new DataRoot(json),
+        timetableData: data,
     })
+    if (Platform.OS == "web"){
+        console.log("data",data);
+    }
 })
 
 export const GlobalContext = React.createContext({state:initalGlobalState, update:()=>{}});

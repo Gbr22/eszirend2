@@ -32,17 +32,6 @@ export default class Day extends React.PureComponent {
                 day.matches(e.days) &&
                 e.periods.includes(period.period)
             );
-            entries.sort((a,b)=>{
-                a = a.lesson.groups[0].id;
-                b = b.lesson.groups[0].id;
-                if (a < b) {
-                    return -1;
-                }
-                if (a > b) {
-                    return 1;
-                }
-                return 0;
-            });
 
             return entries;
         }
@@ -68,6 +57,14 @@ export default class Day extends React.PureComponent {
                     
                     let rows = state.timetableData.periods.map((period,i)=>{
                         let entries = getEntries(state.timetableData.entries,day,period,id);
+                        if (entries.length > 0){
+                            let division = entries[0].lesson.groups[0].division;
+                            let newlist = division.groupIds;
+                            entries = newlist.map(groupId=>{
+                                return entries.find(e=>e.lesson.groups.filter(g=>g.id == groupId).length > 0) || null;
+                            })
+                        }
+                        
                         return {
                             period,
                             entries,
@@ -101,7 +98,7 @@ export default class Day extends React.PureComponent {
                                     }}
                                 >
                                     { entries.map((entry,i)=>{
-                                        return <Entry key={`${entry.id}-${period.id}`} entry={entry} period={period} index={i} />;
+                                        return <Entry key={`${entry?.id}-${period?.id}-${i}`} entry={entry} period={period} index={i} />;
                                     }) }
                                 </View>
                             )

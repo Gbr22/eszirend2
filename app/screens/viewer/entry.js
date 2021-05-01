@@ -1,5 +1,5 @@
 import React from "react"
-import { Text, View } from "react-native"
+import { Platform, Text, View } from "react-native"
 import { TouchableFallback } from "../../components/TouchableFallback"
 import { styles } from "../../styles";
 import seedrandom from "seedrandom";
@@ -56,7 +56,18 @@ export default function Entry({entry, period, index}){
         }
         return name;
     }
+    if (entry == null){
+        return (
+        <View
+            style={{
+                flex: 1,
+                marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
+            }}
+        >
 
+        </View>
+        );
+    }
     return (
         <View
             style={{
@@ -73,7 +84,9 @@ export default function Entry({entry, period, index}){
                     height: "100%",
                 }}
                 onPress={()=>{
-
+                    if(Platform.OS == "web"){
+                        console.log(entry);
+                    }
                 }}
             >
                 <View
