@@ -63,6 +63,21 @@ export default class Day extends React.PureComponent {
                             entries = newlist.map(groupId=>{
                                 return entries.find(e=>e.lesson.groups.filter(g=>g.id == groupId).length > 0) || null;
                             })
+                            entries = entries.map(e=>{
+                                return {
+                                    entry:e,
+                                    width: 1,
+                                    height: 1,
+                                }
+                            })
+                            entries.forEach((e,i)=>{
+                                while (e.entry && entries.filter(fl=>fl.entry?.id == e.entry?.id).length > 1){
+                                    entries.filter(fl=>fl.entry?.id == e.entry?.id).forEach(e=>{
+                                        e.width++;
+                                    })
+                                    entries.splice(i,1);
+                                }
+                            })
                         }
                         
                         return {
@@ -97,8 +112,8 @@ export default class Day extends React.PureComponent {
                                         flexDirection: "row",
                                     }}
                                 >
-                                    { entries.map((entry,i)=>{
-                                        return <Entry key={`${entry?.id}-${period?.id}-${i}`} entry={entry} period={period} index={i} />;
+                                    { entries.map(({entry,width,height},i)=>{
+                                        return <Entry key={`${entry?.id}-${period?.id}-${i}`} entry={entry} width={width} height={height} period={period} index={i} />;
                                     }) }
                                 </View>
                             )

@@ -4,7 +4,7 @@ import { TouchableFallback } from "../../components/TouchableFallback"
 import { styles } from "../../styles";
 import seedrandom from "seedrandom";
 
-export default function Entry({entry, period, index}){
+export default function Entry({entry, period, index, width, height}){
     let textStyle = {
         fontSize: 14,
         color: "#000000",
@@ -60,7 +60,7 @@ export default function Entry({entry, period, index}){
         return (
         <View
             style={{
-                flex: 1,
+                flex: 1*width,
                 marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
             }}
         >
@@ -71,7 +71,7 @@ export default function Entry({entry, period, index}){
     return (
         <View
             style={{
-                flex: 1,
+                flex: 1*width,
                 marginLeft: index == 0 ? 0: styles.viewer.entry.spacing,
                 backgroundColor: getColorForEntry(entry) || "#EDEDED",
                 borderRadius: 8.66,
@@ -85,7 +85,7 @@ export default function Entry({entry, period, index}){
                 }}
                 onPress={()=>{
                     if(Platform.OS == "web"){
-                        console.log(entry);
+                        console.log(entry,width,height);
                     }
                 }}
             >
