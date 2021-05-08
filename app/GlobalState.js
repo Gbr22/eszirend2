@@ -1,9 +1,10 @@
 import React from "react";
 import { Platform } from "react-native";
-import { DataRoot } from "../logic/objects.js";
-import { getData } from "./data";
+import { DataRoot, Versions } from "../logic/objects.js";
+import { getData, getVersions } from "./data";
 
 export let initalGlobalState = {
+    versions:null,
     timetableData:null,
     timetables:null,
 };
@@ -15,15 +16,19 @@ export function setUpdate(func){
 export function UpdateGlobalState(){
     _update(...arguments);
 }
-
-getData().then(json=>{
-    let data = new DataRoot(json);
-    UpdateGlobalState({
-        timetableData: data,
+getVersions().then(versionsJson=>{
+    let versions = new Versions(versionsJson);
+    getData(versions.currentId).then(json=>{
+        let data = new DataRoot(json);
+        UpdateGlobalState({
+            timetableData: data,
+            versions,
+        })
+        if (Platform.OS == "web"){
+            console.log("data",data);
+        }
     })
-    if (Platform.OS == "web"){
-        console.log("data",data);
-    }
 })
+
 
 export const GlobalContext = React.createContext({state:initalGlobalState, update:()=>{}});
