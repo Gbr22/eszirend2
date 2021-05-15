@@ -1,7 +1,7 @@
 import React from "react";
 import { Platform } from "react-native";
 import { DataRoot, Versions } from "../logic/objects.js";
-import { getData, getVersions } from "./data";
+import { getData, getVersions, retrieveData, saveData } from "./data";
 
 export let initalGlobalState = {
     versions:null,
@@ -16,9 +16,12 @@ export function setUpdate(func){
 export function UpdateGlobalState(){
     _update(...arguments);
 }
-getVersions().then(versionsJson=>{
+getVersions().then(async versionsJson=>{
     let versions = new Versions(versionsJson);
-    getData(versions.currentId).then(json=>{
+    let id = versions.currentId;
+    let localData = await retrieveData(id);
+
+    function handleNewData(json){
         let data = new DataRoot(json);
         UpdateGlobalState({
             timetableData: data,
@@ -27,6 +30,14 @@ getVersions().then(versionsJson=>{
         if (Platform.OS == "web"){
             console.log("data",data);
         }
+    }
+
+    if (localData != null){
+        handleNewData(localData);
+    }
+    getData(id).then(json=>{
+        handleNewData(json);
+        saveData(id,json);
     })
 })
 
