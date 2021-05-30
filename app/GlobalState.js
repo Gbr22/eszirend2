@@ -1,7 +1,7 @@
 import React from "react";
 import { Platform } from "react-native";
 import { DataRoot, Versions } from "../logic/objects.js";
-import { getData, getVersions, retrieveData, saveData } from "./data";
+import { getData, getStorage, getVersions, retrieveData, saveData, setStorage } from "./data";
 
 export let initalGlobalState = {
     versions:null,
@@ -16,12 +16,11 @@ export function setUpdate(func){
 export function UpdateGlobalState(){
     _update(...arguments);
 }
-getVersions().then(async versionsJson=>{
+
+async function processVersions(versionsJson){
     let versions = new Versions(versionsJson);
     let id = versions.currentId;
-    /* let localData = await retrieveData(id); */
-    let localData = null;
-    // Turn off local data as the service worker handles serving the api offline for now.
+    let localData = await retrieveData(id);
 
     function handleNewData(json){
         let data = new DataRoot(json);
@@ -37,11 +36,28 @@ getVersions().then(async versionsJson=>{
     if (localData != null){
         handleNewData(localData);
     }
-    getData(id).then(json=>{
-        handleNewData(json);
-        saveData(id,json);
-    })
-})
+    if (navigator.onLine){
+        getData(id).then(json=>{
+            handleNewData(json);
+            saveData(id,json);
+        })
+    }
+}
+
+async function handleData(){
+    let localVersions = await getStorage("versions");
+    if (localVersions != null){
+        processVersions(localVersions);
+    }
+    if (navigator.onLine){
+        getVersions().then(async versionsJson=>{
+            processVersions(versionsJson);
+            setStorage("versions",versionsJson);
+        })
+    }
+}
+handleData();
+
 
 
 export const GlobalContext = React.createContext({state:initalGlobalState, update:()=>{}});

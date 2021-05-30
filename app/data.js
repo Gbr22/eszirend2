@@ -15,10 +15,23 @@ export function getVersions(){
     return fetch(HOST+"/api/versions").then(r=>r.json());
 }
 
+export async function getStorage(id){
+    let data = await AsyncStorage.getItem(id);
+    if (data == null){
+        return null;
+    }
+    try {
+        return JSON.parse(data);
+    } catch(err){
+        return null;
+    }
+}
+export async function setStorage(id,data){
+    await AsyncStorage.setItem(id,JSON.stringify(data));
+}
 export async function saveData(id,data){
-    await AsyncStorage.setItem(`data/${id}`,JSON.stringify(data));
+    return setStorage(`data/${id}`,data);
 }
 export async function retrieveData(id){
-    let item = await AsyncStorage.getItem(`data/${id}`);
-    return item == null ? null : JSON.parse(item);
+    return getStorage(`data/${id}`);
 }
