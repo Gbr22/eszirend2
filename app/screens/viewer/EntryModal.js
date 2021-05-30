@@ -8,11 +8,18 @@ export class EntryModal extends React.PureComponent {
 
     state={
         data:null,
+        visible:false,
     }
 
     open(data){
         this.setState({
             data,
+            visible:true,
+        })
+    }
+    close(){
+        this.setState({
+            visible: false,
         })
     }
 
@@ -25,22 +32,18 @@ export class EntryModal extends React.PureComponent {
         }
 
         return (
-            
-                <Modal
+            <Fragment>
+                { this.state.visible && <Modal
                     animationType="fade"
                     transparent={true}
-                    visible={this.state.data != null}
+                    visible={this.state.visible && this.state.data != null}
                     onRequestClose={() => {
-                      this.setState({
-                        data:null,
-                      })
+                      this.close();
                     }}
                 >
                     <TouchableWithoutFeedback
                         onPress={()=>{
-                            this.setState({
-                                data:null,
-                            })    
+                            this.close();  
                         }}
                     >
                     <View
@@ -147,8 +150,8 @@ export class EntryModal extends React.PureComponent {
                     </View>
                     </TouchableWithoutFeedback>
                     
-                </Modal>
-            
+                </Modal> }
+            </Fragment>
         )
     }
 }
