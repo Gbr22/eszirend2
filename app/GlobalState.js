@@ -19,7 +19,9 @@ export function UpdateGlobalState(){
 getVersions().then(async versionsJson=>{
     let versions = new Versions(versionsJson);
     let id = versions.currentId;
-    let localData = await retrieveData(id);
+    /* let localData = await retrieveData(id); */
+    let localData = null;
+    // Turn off local data as the service worker handles serving the api offline for now.
 
     function handleNewData(json){
         let data = new DataRoot(json);

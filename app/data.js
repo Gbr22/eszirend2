@@ -2,6 +2,11 @@ import { Platform } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let HOST = "";
+if (__DEV__ && Platform.OS == "android"){
+    HOST = "http://192.168.0.101:8888";
+} else if (Platform.OS == "android"){
+    HOST = "https://eszirend.kess.hu";
+}
 
 export function getData(id){
     return fetch(HOST+"/api/data?id="+id).then(r=>r.json());

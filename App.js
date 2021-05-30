@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { setUpdate, initalGlobalState, GlobalContext } from './app/GlobalState';
 import { HomeScreen } from './app/screens/home/screen';
 import { ViewerScreen } from './app/screens/viewer/screen';
@@ -72,7 +72,17 @@ export default class App extends React.Component {
         
       );
     }
-    return <View></View>;
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+        }}
+      >
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
   }
 }
 const styles = StyleSheet.create({
