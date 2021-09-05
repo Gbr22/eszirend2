@@ -2,12 +2,16 @@ import React from "react";
 import { Platform } from "react-native";
 import { DataRoot, Versions } from "../logic/objects.js";
 import { getData, getStorage, getVersions, retrieveData, saveData, setStorage } from "./data";
+import * as Network from 'expo-network';
+
 
 export let initalGlobalState = {
     versions:null,
     timetableData:null,
     timetables:null,
 };
+
+
 
 var _update;
 export function setUpdate(func){
@@ -30,26 +34,35 @@ async function processVersions(versionsJson){
         })
         if (Platform.OS == "web"){
             console.log("data",data);
+        } else {
+            console.log("data",typeof data);
         }
     }
 
     if (localData != null){
         handleNewData(localData);
     }
-    if (navigator.onLine){
+    let online = (await Network.getNetworkStateAsync()).isConnected;
+    if (online){
         getData(id).then(json=>{
             handleNewData(json);
             saveData(id,json);
+        }).catch(err=>{
+            console.warn(err);
+            alert("Hiba: "+err.message);
         })
     }
 }
 
-async function handleData(){
+export async function handleData(){
     let localVersions = await getStorage("versions");
     if (localVersions != null){
         processVersions(localVersions);
     }
-    if (navigator.onLine){
+    let online = (await Network.getNetworkStateAsync()).isConnected;
+    console.log("online",online);
+    if (online){
+        console.log("Processing versions");
         getVersions().then(async versionsJson=>{
             processVersions(versionsJson);
             setStorage("versions",versionsJson);
@@ -57,7 +70,6 @@ async function handleData(){
     }
 }
 handleData();
-
 
 
 export const GlobalContext = React.createContext({state:initalGlobalState, update:()=>{}});

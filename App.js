@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { setUpdate, initalGlobalState, GlobalContext } from './app/GlobalState';
+import { setUpdate, initalGlobalState, GlobalContext, handleData } from './app/GlobalState';
 import { HomeScreen } from './app/screens/home/screen';
 import { ViewerScreen } from './app/screens/viewer/screen';
 
@@ -55,6 +55,7 @@ export default class App extends React.Component {
     setUpdate((o)=>{
       this.update(o);
     });
+
     console.log("App mounted");
   }
   update(o){
