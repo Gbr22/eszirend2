@@ -26,7 +26,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "gbr22.eszirend",
-      "permissions": []
+      "permissions": [],
+	  "versionCode":2,
     },
     "web": {
       "favicon": "./assets/icon-cropped.png",
