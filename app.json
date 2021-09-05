@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/icon-adaptive.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "gbr22.eszirend"
+      "package": "gbr22.eszirend",
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/icon-cropped.png",
