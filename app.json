@@ -2,7 +2,7 @@
   "expo": {
     "name": "eszirend",
     "slug": "eszirend",
-    "description":"Órarend app az eszinek",
+    "description": "Órarend app az eszinek",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,15 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-adaptive.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "gbr22.eszirend"
     },
     "web": {
       "favicon": "./assets/icon-cropped.png",
-      "themeColor":"#0074D9",
-      "backgroudColor":"#ffffff",
-      "lang":"hu",
-      "startUrl":"/",
-      "barStyle":"black-translucent"
+      "themeColor": "#0074D9",
+      "backgroudColor": "#ffffff",
+      "lang": "hu",
+      "startUrl": "/",
+      "barStyle": "black-translucent"
     }
   }
 }
