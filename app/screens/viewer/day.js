@@ -61,8 +61,12 @@ export default class Day extends React.PureComponent {
                             let division = entries[0].lesson.groups[0].division;
                             let newlist = division.groupIds;
                             entries = newlist.map(groupId=>{
-                                return entries.find(e=>e.lesson.groups.filter(g=>g.id == groupId).length > 0) || null;
-                            })
+                                let filter = entries.filter(e=>e.lesson.groups.filter(g=>g.id == groupId).length > 0);
+                                if (filter.length > 0){
+                                    return filter;
+                                }
+                                return null;
+                            }).flat();
                             entries = entries.map(e=>{
                                 return {
                                     entry:e,
@@ -70,14 +74,14 @@ export default class Day extends React.PureComponent {
                                     height: 1,
                                 }
                             })
-                            entries.forEach((e,i)=>{
+                            /* entries.forEach((e,i)=>{
                                 while (e.entry && entries.filter(fl=>fl.entry?.id == e.entry?.id).length > 1){
                                     entries.filter(fl=>fl.entry?.id == e.entry?.id).forEach(e=>{
                                         e.width++;
                                     })
                                     entries.splice(i,1);
                                 }
-                            })
+                            }) */
                         }
                         
                         return {

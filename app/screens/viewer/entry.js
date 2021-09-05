@@ -82,12 +82,33 @@ export default function Entry({entry, period, index, width, height, ModalRef}){
                             style={{
                                 flexDirection: "row",
                                 alignItems: "center",
-                                justifyContent: "space-between",
+                                /* justifyContent: "space-between", */
                                 height: 16.33,
                             }}
                         >
                             <Text style={textStyle} numberOfLines={1}>{ entry.classrooms.map(e=>e.shortName).join(", ") }</Text>
+                            <View style={{flex:1}}></View>
                             { entry.lesson.groups[0].entireClass == false && <Text style={textStyle} numberOfLines={1}>{ entry.lesson.formatGroups({shorten:true}) }</Text> }
+                            {
+                                entry.week.type != "all" &&
+                                <View
+                                    style={{
+                                        marginLeft: 7,
+                                        backgroundColor: "rgba(0,0,0,0.25)",
+                                        paddingHorizontal: 8,
+                                        paddingVertical: 1,
+                                        borderRadius: 5
+                                    }}
+                                >
+                                    <Text
+                                        style={{...textStyle,...{
+                                            color: "white",
+                                            fontWeight: "bold"
+                                        }}}
+                                        numberOfLines={1}>{ entry.week.shortName }
+                                    </Text> 
+                                </View>
+                            }
                         </View>
                         <View
                             style={{

@@ -129,6 +129,7 @@ export class EntryModal extends React.PureComponent {
                                                 ["Tanár", entry.lesson.teachers.map(e=>e.name).join(", ")],
                                                 ["Tanterem", entry.classrooms.map(e=>e.name).join(", ")],
                                                 ["Csoport", entry.lesson.formatGroups({shorten:false})],
+                                                ["Hét", entry.week.name],
                                             ].map(([key,value])=>{
                                                 return (
                                                     <View
