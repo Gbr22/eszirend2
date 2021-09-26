@@ -6,13 +6,16 @@ import Entry from "./entry";
 
 export default class Day extends React.PureComponent {
     state={
-        visible:false,
+        visible:this.isVisible(),
     }
-    componentDidMount(){
+
+    isVisible(){
         let {index, initalDay} = this.props;
-        if (index == initalDay){
-            this.setState({visible:true});
-        } else {
+        return index == initalDay;
+    }
+    
+    componentDidMount(){
+        if (!this.isVisible()) {
             setTimeout(()=>{
                 this.setState({visible:true});
             },0);
@@ -36,10 +39,6 @@ export default class Day extends React.PureComponent {
             return entries;
         }
 
-        if (!this.state.visible){
-            return <Fragment></Fragment>;
-        }
-
         return (
             <View
                 style={{
@@ -47,7 +46,7 @@ export default class Day extends React.PureComponent {
                     width: "100%",
                 }}
             >
-            <GlobalContext.Consumer
+            { this.state.visible && <GlobalContext.Consumer
                 style={{
                     flex:1,
                 }}
@@ -125,7 +124,7 @@ export default class Day extends React.PureComponent {
                         }) }
                     </Fragment>
                 }}
-            </GlobalContext.Consumer>
+            </GlobalContext.Consumer> }
             </View>
         );
     }

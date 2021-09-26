@@ -19,6 +19,25 @@ export class ViewerScreenClass extends React.PureComponent {
     PagerRef = React.createRef();
     DayBarRef = React.createRef();
     ModalRef = React.createRef();
+    ScrollContainer = React.createRef();
+
+    scrollTop = 0;
+    firstSwipe = true;
+    firstScroll = true;
+
+    initalDay = 0;
+
+    fixScrollJump(){
+        if (Platform.OS == "android"){
+            let scrollTop = 73;
+            this.ScrollContainer.current?.scrollToEnd({animated:false});
+            this.PagerRef.current?.setPageWithoutAnimation(1);
+            this.PagerRef.current?.setPageWithoutAnimation(this.initalDay);
+            this.ScrollContainer.current?.scrollTo({x:0,y:scrollTop, animated:false})
+        }
+    }
+
+
     render(){
         let { navigation, route, linkTo } = this.props;
         
@@ -28,7 +47,9 @@ export class ViewerScreenClass extends React.PureComponent {
         let rowHeight = styles.viewer.row.height;
         let dayBarHeight = styles.viewer.dayBar.height;
 
-        let initalDay = 0;
+        let that = this;
+
+        
 
         return (
             <View
@@ -54,10 +75,19 @@ export class ViewerScreenClass extends React.PureComponent {
                             }}
                         >
                             <ScrollView
+                                ref={this.ScrollContainer}
                                 style={{
                                     paddingTop: StatusBar.currentHeight,
                                     flex: 1,
                                     overflow: "hidden",
+                                }}
+                                
+                                
+                                
+                                onScroll={(e)=>{
+                                    that.scrollTop = e.nativeEvent.contentOffset.y;
+                                    
+                                    /* console.log(that.scrollTop); */
                                 }}
                             >
                                 <View
@@ -130,10 +160,22 @@ export class ViewerScreenClass extends React.PureComponent {
                                         }) }
                                     </View>
                                     <Pager
-                                        initialPage={initalDay}
+                                        initialPage={this.initalDay}
+                                        onMounted={()=>{
+                                            this.fixScrollJump();
+                                        }}
+                                        
                                         onPageSelected={(e)=>{
                                             let pos = e.nativeEvent.position;
                                             this.DayBarRef.current?.setIndex(pos);
+
+
+                                            if (that.firstSwipe){
+                                                that.fixScrollJump();
+                                                that.firstSwipe = false;
+                                            }
+                                            
+                                            
                                         }}
                                         style={{
                                             flex: 1,
@@ -150,8 +192,9 @@ export class ViewerScreenClass extends React.PureComponent {
                                                         flex:1,
                                                         width: "100%",
                                                     }}
+                                                    collapsable={false}
                                                 >
-                                                    <Day index={day.val} id={id} initalDay={initalDay} ModalRef={this.ModalRef} />
+                                                    <Day index={day.val} id={id} initalDay={this.initalDay} ModalRef={this.ModalRef} />
                                                 </View>
                                             )
                                         }) }
