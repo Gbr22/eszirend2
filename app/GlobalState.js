@@ -9,6 +9,7 @@ export let initalGlobalState = {
     versions:null,
     timetableData:null,
     timetables:null,
+    selectedVersionId:null,
 };
 
 
@@ -20,18 +21,15 @@ export function setUpdate(func){
 export function UpdateGlobalState(){
     _update(...arguments);
 }
-
-async function processVersions(versionsJson){
-    let versions = new Versions(versionsJson);
-    let id = versions.currentId;
+async function setVersion(id){
     let localData = await retrieveData(id);
 
     function handleNewData(json){
         let data = new DataRoot(json);
         UpdateGlobalState({
             timetableData: data,
-            versions,
-        })
+            selectedVersionId:id
+        });
         if (Platform.OS == "web"){
             console.log("data",data);
         } else {
@@ -52,6 +50,15 @@ async function processVersions(versionsJson){
             alert("Hiba: "+err.message);
         })
     }
+}
+async function processVersions(versionsJson){
+    let versions = new Versions(versionsJson);
+    console.log("versions",versions);
+    let id = versions.currentId;
+    setVersion(id);
+    UpdateGlobalState({
+        versions,
+    });
 }
 
 export async function handleData(){
