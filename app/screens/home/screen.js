@@ -4,9 +4,14 @@ import { Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from "r
 import seedrandom from "seedrandom";
 import { TouchableFallback } from "../../components/TouchableFallback";
 import { GlobalContext } from "../../GlobalState";
+import '@expo/match-media'
+import { useMediaQuery } from "react-responsive";
 
 export function HomeScreen({ navigation }){
     const linkTo = useLinkTo();
+    const isBigScreen = useMediaQuery({    
+        minWidth: 500
+    });
     return (
         <GlobalContext.Consumer>
             {({state, update}) => {
@@ -48,8 +53,8 @@ export function HomeScreen({ navigation }){
                     style={{
                         flexDirection: "row",
                         flexWrap: "wrap",
-                        paddingHorizontal: 20.66,
-                        justifyContent: "space-between",
+                        paddingHorizontal: isBigScreen ? 20.66/2 : 20.66,
+                        justifyContent: isBigScreen ? "center" : "space-between",
                     }}
                 >
                     { state.timetableData.classes.map((_class,i)=>{
@@ -67,6 +72,7 @@ export function HomeScreen({ navigation }){
                                     borderColor: "#ECECEC",
                                     overflow: "hidden",
                                     marginBottom: 20.66,
+                                    marginHorizontal: isBigScreen ? 20.66/2 : 0,
                                 }}
                             >
                                 <TouchableFallback
